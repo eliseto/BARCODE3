@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_dai,access.product.dai,model_arancel_type,stock.group_stock_user,1,1,1,1
+access_arancel_valution,access.arancel.valuation,model_stock_valuation_arancel,stock.group_stock_user,1,1,1,1

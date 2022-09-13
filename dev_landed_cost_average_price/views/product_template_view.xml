@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_product_landed_cost_form_inherit" model="ir.ui.view">
+            <field name="name">product.template.landed.cost.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+               <field name="uom_id" position="before">
+                <field name="arancel_id" attrs="{'invisible': [('type', '!=', 'product')]}"/>
+               </field>
+            </field>
+        </record>
+
+        <record id="view_stock_landed_cost_form_inherit" model="ir.ui.view">
+            <field name="name">stock.landed.cost.form.inherit</field>
+            <field name="model">stock.landed.cost</field>
+            <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+            <field name="arch" type="xml">
+            <field name="vendor_bill_id" position="after">
+                    <field name="tasa_cambio"/>
+                    <field name="tc_currency_id" options="{'no_create_edit': True}"/>
+                </field>
+                <xpath expr="//form[1]/sheet[1]/notebook[1]/page[@name='additional_costs']/field[@name='cost_lines']/tree[1]/field[@name='split_method']" position="after">
+                    <field optional="show" name="amount_currency" widget="monetary" options="{'currency_field': 'tc_currency_id'}"  groups="base.group_multi_currency"/>
+                </xpath>
+                <field name="valuation_adjustment_lines" position="after">
+                    <!--<page string="Aranceles">-->
+                    <div class="oe_clear"/>
+                    <separator string="Aranceles"/>
+                    <field name="aranceles_ids">
+                        <form string="Aranceles">
+                            <group>
+                                <group>
+                                    <field name="product_id"/>
+                                    <field name="quantity"/>
+                                </group>
+                            </group>
+                        </form>
+                        <tree string="Aranceles" editable="bottom" create="0">
+                            <field name="product_id" readonly="1"/>
+                            <field name="weight" readonly="1" optional="hide"/>
+                            <field name="volume" readonly="1" optional="hide"/>
+                            <field name="quantity" readonly="1"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="former_cost" readonly="1" widget="monetary"/>
+                            <field name="arancel_id" readonly="1"/>
+                            <field name="arancel_amount" widget="monetary"/>
+                        </tree>
+                    </field>
+                </field>
+                <!--</notebook>-->
+            </field>
+        </record>
+    </data>
+</odoo>

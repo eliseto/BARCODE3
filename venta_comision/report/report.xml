@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<record  id="venta_comision_report_xlsx" model="ir.actions.report">
+<field name="name">Comisiones</field>
+<field name="report_name">venta_comision.venta_comision_excel</field>
+<field name="report_type">xlsx</field>
+<field name="model">venta.comision</field>
+<field name="report_file">venta_comision.venta_comision_excel</field>
+<field name="print_report_name">object.name</field>
+</record>
+</odoo>

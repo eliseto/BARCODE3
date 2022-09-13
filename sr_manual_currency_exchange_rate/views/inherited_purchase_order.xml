@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+		<record
+			id="purchase_order_form_extends_add_manual_currency_exchange_rate"
+			model="ir.ui.view">
+			<field name="name">purchase.order.form.extends.add.manual.currency.exchange.rate
+			</field>
+			<field name="model">purchase.order</field>
+			<field name="inherit_id" ref="purchase.purchase_order_form" />
+			<field name="arch" type="xml">
+				<field name="date_order" position="after">
+					<field name="active_manual_currency_rate" invisible="1" />
+					<field name="apply_manual_currency_exchange" string="Aplicar cambio de moneda manual"
+						attrs="{'invisible': [('active_manual_currency_rate', '=', False)]}" />
+					<field name="manual_currency_exchange_rate" string="Tasa de cambio de moneda manual"
+						attrs="{'invisible': ['|',('apply_manual_currency_exchange', '=', False),('active_manual_currency_rate', '=', False)],'required':[('apply_manual_currency_exchange', '=', True)]}" />
+				</field>
+			</field>
+		</record>
+
+		<record
+			id="view_picking_form_extends_add_manual_currency_exchange_rate"
+			model="ir.ui.view">
+			<field name="name">view.picking.form.extends.add.manual.currency.exchange.rate
+			</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="stock.view_picking_form" />
+			<field name="arch" type="xml">
+				<xpath expr="//field[@name='owner_id']" position="after">
+					<field name="active_manual_currency_rate" invisible="1"/>
+					<field name="apply_manual_currency_exchange" string="Aplicar cambio de moneda manual" attrs="{'invisible': [('active_manual_currency_rate', '=', False)]}"/>
+					<field name="manual_currency_exchange_rate" string="Tasa de cambio de moneda manual" attrs="{'invisible': ['|',('apply_manual_currency_exchange', '=', False),('active_manual_currency_rate', '=', False)],'required':[('apply_manual_currency_exchange', '=', True)]}"/>
+					<field name="active_validate_t_c" groups="sr_manual_currency_exchange_rate.group_admin_tc" string="Validar TC" attrs="{'invisible': [('apply_manual_currency_exchange', '=', False)]}"/>
+					<field name="tc_status" groups="sr_manual_currency_exchange_rate.group_admin_tc" string="Estado de TC" attrs="{'invisible': [('apply_manual_currency_exchange', '=', False)]}"/>
+				</xpath>
+			</field>
+		</record>
+
+		<record id="view_picking_tucan_search" model="ir.ui.view">
+			<field name="name">view.picking.tucan.search</field>
+			<field name="model">stock.picking</field>
+			<field name="inherit_id" ref="stock.view_picking_internal_search" />
+			<field name="arch" type="xml">
+				<data>
+					<separator/>
+					<xpath expr="//filter[@name='starred']" position="after">
+						<filter name="tc_status" string="Pendientes de aprobar" domain="[('tc_status', '=', 'pending_aproval')]"/>
+						<filter name="tc_status" string="Aprobado" domain="[('tc_status', '=', 'passed')]"/>
+					</xpath>
+				</data>
+			</field>
+		</record>
+
+	</data>
+</odoo>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id='view_related_invoice_stock_landed_costs_form' model='ir.ui.view'>
+        <field name="name">view_related_invoice_stock_landed_costs_form</field>
+        <field name="model">stock.landed.cost</field>
+        <field name="inherit_id" ref="stock_landed_costs.view_stock_landed_cost_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook[last()]" position="inside">
+                <page string="Related Invoice" name="vendor_related_invoice">
+
+                    <field name="vendor_related_invoice_ids">
+                        <tree>
+                            <field name="name"/>
+                            <field name="partner_id" />
+                            <field name="ref"/>
+                            <field name="amount_total_signed" sum="Total"/>
+                            <field name="amount_total_in_currency_signed" sum="Total"/>
+                            <field name="payment_state" optional="hide"/>
+                            <field name="state" optional="hide"/>
+                        </tree>
+                    </field>
+
+                </page>
+            </xpath>
+        </field>
+    </record>
+    <record id='view_related_old_cost' model='ir.ui.view'>
+        <field name="name">view_related_old_cost</field>
+        <field name="model">product.template</field>
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='categ_id']" position="before">
+              <field name="old_cost" string="Ùltimo costo" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

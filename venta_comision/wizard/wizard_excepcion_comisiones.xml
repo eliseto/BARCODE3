@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<data>
+    <record id="wizard_excepcion_comisiones" model="ir.ui.view">
+        <field name="name">Carga masiva excepciones</field>
+        <field name="model">wizard.excepcion.comisiones</field>
+        <field name="arch" type="xml">
+        <form string="Excepciones">
+        <group>
+            <group>
+              <field name="excepciones_file" filename="excepciones_name"/>
+              <field name="excepciones_name" invisible="1"/>
+            </group>
+            <hr/>
+          </group>
+            <footer>
+                <button name="load_exception" string="  Carga Masiva Productos" type="object" class="btn btn-primary fa fa-upload"/>
+                <button name="delete_exception" string="  ELIMINAR TODAS LAS EXCEPCIONES" type="object" class="btn btn-danger fa fa-trash"/>
+                <button string="Cancel" class="btn btn-secondary" special="cancel" />
+            </footer>
+        </form>
+        </field>
+    </record>
+
+    <record id="action_wizard_excepcion_comisiones" model="ir.actions.act_window">
+        <field name="name">Carga masiva excepciones</field>
+        <field name="res_model">wizard.excepcion.comisiones</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="wizard_excepcion_comisiones"/>
+        <field name="binding_model_id" ref="venta_comision.model_venta_comision_tabla"/>
+        <field name="binding_view_types">form</field>
+        <field name="target">new</field>
+    </record>
+</data>
+</odoo>

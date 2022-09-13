@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <template id="custom_ticket_layout">
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+        </t>
+        <div class="header">
+
+            <div class="row">
+                <div class="col text-center" style="text-align:center;">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 35px;"
+                         alt="Logo"/>
+                    <div t-if="company.name" class="text-center">
+                        <span t-field="company.name"/>
+                        <t t-if="company.country_id">(<span t-esc="company.country_id.name"/>)
+                        </t>
+                    </div>
+                    <div t-if="company.street" class="text-center">
+                        <span class="o_force_ltr" t-field="company.street"/>
+                        <t t-if="company.street2">,
+                            <span class="o_force_ltr" t-field="company.street2"/>
+                        </t>
+                    </div>
+                    <div t-if="company.vat" class="text-center">Nit:
+                        <span class="o_force_ltr" t-field="company.vat"/>
+                    </div>
+                    <div t-if="company.phone" class="text-center">Tel:
+                        <span class="o_force_ltr" t-field="company.phone"/>
+                    </div>
+                    <div t-if="company.email" style="text-align:center;">
+                        <span t-field="company.email"/>
+                    </div>
+                    <div t-if="company.website">
+                        <span t-field="company.website"/>
+                    </div>
+                    <div>--------------------------------------</div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <b>Comprobante de Pago</b>
+                </div>
+            </div>
+        </div>
+        <t t-call="web.html_container">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+            <div class="article" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+                 t-att-data-oe-lang="o and o.env.context.get('lang')">
+                <t t-out="0"/>
+            </div>
+        </t>
+    </template>
+
+    <template id="ticket_payment_receipt">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="kal_ticket_payment.custom_ticket_layout">
+                    <div class="row">
+                        <table class="table table-sm" style="width:100%; margin-top:45px;">
+                            <tbody>
+                                <tr>
+                                    <td style="width:45%;border-color: white;">
+                                        <b>Cliente:</b>
+                                        <br/>
+                                        <b>NIT:</b>
+                                        <br/>
+                                        <b>Código:</b>
+                                        <br/>
+                                        <b>Deuda Total:</b>
+                                        <br/>
+                                        <b>Fecha de Pago:</b>
+                                        <br/>
+                                        <b>Tipo Pago:</b>
+                                        <br/>
+                                        <b>Forma de Pago :</b>
+                                        <br/>
+                                        <b>Tipo de Moneda:</b>
+                                        <br/>
+                                        <b>Valor Cancelado:</b>
+                                        <br/>
+                                        <b>Referencia Transacción:</b>
+                                        <br/>
+                                        <b>Facturas cobradas:</b>
+                                    </td>
+                                    <td style="text-align: right;word-break: break-all;border-color: white;">
+                                        <span style="word-break: break-all;" t-field="o.partner_id.name"/>
+                                        <br/>
+                                        <span t-field="o.partner_id.vat"/>
+                                        <br/>
+                                        <span t-field="o.partner_id.ref"/>
+                                        <br/>
+                                        <span t-field="o.partner_id.credit"/>
+                                        <br/>
+                                        <span t-field="o.date"/>
+                                        <br/>
+                                        <span t-field="o.payment_type"/>
+                                        <br/>
+                                        <span t-field="o.journal_id.name"/>
+                                        <br/>
+                                        <span t-field="o.currency_id"/>
+                                        <br/>
+                                        <span t-field="o.amount"/>
+                                        <br/>
+                                        <span t-field="o.ref"/>
+                                        <br/>
+                                        <t t-foreach="o.reconciled_invoice_ids" t-as="invoice">
+                                            <span style="float: right;" t-esc="invoice.name"/>
+                                            <br/>
+                                        </t>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <br/>
+                    <br/>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col">
+                            <b>Observaciones:</b>
+                            <p style="font-size: 15px; text-align:justify">Si los pagos son efectuados con cheques que
+                                el banco no haga efectivos, este recibo queda anulado. Se cobrará Q150,00 por cheque
+                                rechazado
+                            </p>
+
+                        </div>
+                    </div>
+
+                    <br/>
+                    <br/>
+                    <div style="text-align:center">
+                        <td>
+                            <b>Recibo de caja N°:</b>
+                        </td>
+                        <span>
+                            <t t-esc="o.name"></t>
+                        </span>
+                    </div>
+                    <div style="text-align:center">
+                        <span>--------------------------------------</span>
+                    </div>
+                    <div style="text-align:center">
+                        <span t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d %H:%M')"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_ticket_payment" model="report.paperformat">
+        <field name="name">Ticket Receipt</field>
+        <field name="default" eval="True"/>
+        <field name="format">custom</field>
+        <field name="page_height">195</field>
+        <field name="page_width">80</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">40</field>
+        <field name="margin_bottom">2</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="dpi">110</field>
+    </record>
+
+    <record id="kal_ticket_payment.action_custom_receipt_payment_report" model="ir.actions.report">
+        <field name="name">Ticket recibo de pago</field>
+        <field name="model">account.payment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="binding_model_id" ref="model_account_payment"/>
+        <field name="paperformat_id" ref="kal_ticket_payment.paperformat_ticket_payment"/>
+        <field name="report_name">kal_ticket_payment.ticket_payment_receipt</field>
+        <field name="print_report_name">('Ticket - %s' % (object.name))</field>
+        <field name="report_file">kal_ticket_payment.ticket_payment_receipt</field>
+        <field name="binding_type">report</field>
+    </record>
+
+
+</odoo>

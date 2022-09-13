@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_manager_venta_comision,access_manager_venta_comision,model_venta_comision,base.group_user,1,1,1,1
+access_venta_comision_line,access_venta_comision_line,model_venta_comision_line,base.group_user,1,1,1,1
+access_venta_comision_tabla,access_venta_comision_tabla,model_venta_comision_tabla,base.group_user,0,0,0,0
+access_venta_comision_tabla_producto,access_venta_comision_tabla_producto,model_venta_comision_tabla_producto,base.group_user,1,1,1,1
+access_venta_comision_tabla_manager,access_venta_comision_tabla_manager,model_venta_comision_tabla,base.group_user,1,1,1,1
+access_wizard_excepcion_comisiones,access_wizard_excepcion_comisiones,model_wizard_excepcion_comisiones,base.group_user,1,1,1,1

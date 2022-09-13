@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--vista de formulario pago de clientes-->
+        <record id="account_payment_vendedor" model="ir.ui.view">
+            <field name="name">account.payment.vendedor</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//sheet/group[1]/group[@name='group2']" position="inside">
+                    <field name="vendedor_id"  attrs="{'invisible': [('payment_type', 'not in', 'inbound')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- vista de lista en menú pagos de clientes-->
+        <record id="account_payment_vendedor_tree" model="ir.ui.view">
+            <field name="name">account.payment.vendedor.tree</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="vendedor_id"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- wizard pagos de clientes desde form factura-->
+        <record id="account_custpayment_vendedor_wizard" model="ir.ui.view">
+            <field name="name">account.custpayment.vendedor.wizard</field>
+            <field name="model">account.payment.register</field>
+            <field name="inherit_id" ref="account.view_account_payment_register_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='communication']" position="after">
+                    <field name="vendedor_id"  attrs="{'invisible': [('payment_type', 'not in', 'inbound')]}"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
+

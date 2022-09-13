@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="reporte_historico">
+        <t t-call="web.html_container">
+            <t t-call="web.internal_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <div class="page">
+                     <div class="row" style="text-align:center;">
+                            <div class="col-md-12">
+                                <strong><h2><span t-esc="doc.env.user.company_id.name"/></h2></strong>
+                            </div>
+                        </div>
+                        <div class="row" style="text-align:center;">
+                            <div class="col-md-12">
+                                <strong><h3>Historial Crediticio</h3></strong>
+                            </div>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-8">
+                                Cliente: <strong><span t-field="doc.name"/></strong>
+                            </div>
+                            <div class="col-4">
+                                NIT: <strong><span t-field="doc.vat" t-if="doc.vat"/></strong>
+                                <strong><t t-if="not doc.vat">CF</t></strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                Direccion: <strong><span t-field="doc.street"/></strong>
+                            </div>
+                            <div class="col-4">
+                                Tarifa: <strong><span t-field="doc.property_product_pricelist.name" t-if="doc.property_product_pricelist"/></strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                Codigo interno: <strong><span t-field="doc.ref" t-if="doc.ref"/></strong>
+                            </div>
+                            <div class="col-4">
+                                Dias de credito: <strong><span t-field="doc.credit_limit_id.days" t-if="doc.credit_limit_id"/></strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                                Vendedor: <strong><span t-field="doc.user_id.name" t-if="doc.user_id"/></strong>
+                            </div>
+                            <div class="col-4">
+                                Limite de credito: <strong><span t-esc="'Q{:,.2f}'.format(doc.credit_limit)" t-if="doc.credit_limit" widget='monetary'/></strong>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-8">
+                               Credito disponible: <strong><span t-esc="'Q{:,.2f}'.format(doc.credit_limit - doc.credit)" widget='monetary'/></strong>
+                            </div>
+                            <div class="col-4">
+                                Saldo: <strong><span t-field="doc.credit" widget='monetary'/></strong>
+                            </div>
+                        </div>
+                        <t t-set="abono" t-value="0"/>
+                        <t t-set="cargo" t-value="0"/>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Documento</th>
+                                    <th>No. Documento</th>
+                                    <th>Emision</th>
+                                    <th>Vencimiento</th>
+                                    <th>Plazo</th>
+                                    <th>Transcurridos</th>
+                                    <th>Retraso</th>
+                                    <th>Cargo</th>
+                                    <th>Abono</th>
+                                    <th>Saldo</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr t-foreach="doc.get_info_credit()" t-as="l">
+                                    <td><span t-esc="l['documento']"/></td>
+                                    <td><span t-esc="l['numero']"/></td>
+                                    <td><span t-esc="l['emision']"/></td>
+                                    <td><span t-esc="l['vencimiento']"/></td>
+                                    <td><span t-esc="l['plazo']"/></td>
+                                    <td style="text-align:right;"><span t-esc="l['transcurrido']"/></td>
+                                    <td style="text-align:right;"><span t-esc="l['retraso']"/></td>
+                                    <td style="text-align:right;"><span t-esc="l['cargo']"/></td>
+                                    <t t-set="cargo" t-value="cargo + l['cargo_m']"/>
+                                    <td style="text-align:right;"><span t-esc="l['abono']"/></td>
+                                    <t t-set="abono" t-value="abono + l['abono_m']"/>
+                                    <td style="text-align:right;"><span t-esc="l['saldo']"/></td>
+                                </tr>
+                                <hr/>
+                                <tr>
+                                    <td colspan="7" style="text-align:right;">Total</td>
+                                    <td style="text-align:right;"><span t-esc="doc.get_moneda(cargo)"/></td>
+                                    <td style="text-align:right;"><span t-esc="doc.get_moneda(abono)"/></td>
+                                    <td style="text-align:right;"><span t-esc="doc.get_moneda(cargo - abono)"/></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="footer">
+                        <div class="row">
+                            <div class="col-md-4" style="text-align:center; font-size:12px;">
+                                <strong>Generado por:<t t-esc="doc.env.user.name"/></strong>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
